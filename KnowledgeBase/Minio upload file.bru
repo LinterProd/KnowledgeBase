@@ -1,0 +1,20 @@
+meta {
+  name: Minio upload file
+  type: http
+  seq: 15
+}
+
+post {
+  url: {{url}}/api/minio/create
+  body: multipartForm
+  auth: inherit
+}
+
+body:multipart-form {
+  file: @file(C:\Users\Admin\Downloads\orders.csv)
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

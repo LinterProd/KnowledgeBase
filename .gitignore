@@ -1,0 +1,90 @@
+﻿### Backend ###
+# Build
+backend/.gradle/
+backend/gradle/
+backend/build/
+!backend/gradle/wrapper/gradle-wrapper.jar
+backend/!gradlew
+backend/!gradlew.bat
+
+# IDE
+backend/.idea/
+backend/*.iws
+backend/*.iml
+backend/*.ipr
+
+# Logs
+backend/logs/
+backend/*.log
+backend/log/
+
+# Environment
+backend/.env*
+backend/!application*.properties
+backend/!application*.yml
+
+# Database
+backend/*.db
+backend/*.h2.db
+
+# Gradle
+backend/.gradle/
+backend/gradle-app.setting
+
+# Maven (на всякий случай)
+backend/target/
+backend/pom.xml.tag
+backend/pom.xml.releaseBackup
+backend/pom.xml.versionsBackup
+
+
+### Frontend ###
+# Dependencies
+frontend/node_modules/
+frontend/.npm
+frontend/.yarn-integrity
+
+# Build outputs
+frontend/.next/
+frontend/out/
+frontend/dist/
+frontend/build/
+
+# Environment variables
+frontend/.env*
+frontend!.env.example
+
+# Cache
+frontend/.cache/
+frontend/.turbo/
+
+# Debug
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+
+# Runtime data
+frontend/pids
+frontend/*.pid
+frontend/*.seed
+frontend/*.pid.lock
+
+
+### Universal ###
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE (корневой)
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Temporary
+*.tmp
+*.temp
+
+# Logs (корневые)
+*.log
+logs/

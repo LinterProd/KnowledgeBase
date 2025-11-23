@@ -1,0 +1,23 @@
+meta {
+  name: Update User
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{url}}/api/users/3
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "email": "marshall@gmail.com",
+    "password": "StrongPassword"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

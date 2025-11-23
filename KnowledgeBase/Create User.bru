@@ -1,0 +1,28 @@
+meta {
+  name: Create User
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{url}}/api/users
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+    "username": "marshall",
+    "email": "marshall@gmail.com",
+    "password": "123123"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

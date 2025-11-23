@@ -1,0 +1,31 @@
+meta {
+  name: Create document
+  type: http
+  seq: 10
+}
+
+post {
+  url: {{url}}/api/documents
+  body: multipartForm
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:multipart-form {
+  dto: '''
+    {
+      "title": "Мой документ",
+      "description": "Описание документа",
+      "categoryId": 1
+    }
+  ''' @contentType(application/json)
+  file: @file(C:\Users\Admin\Downloads\orders.csv)
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

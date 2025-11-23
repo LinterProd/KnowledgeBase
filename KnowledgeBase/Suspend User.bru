@@ -1,0 +1,16 @@
+meta {
+  name: Suspend User
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{url}}/api/users/3/suspend
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
