@@ -1,20 +1,17 @@
 meta {
   name: Get documents
   type: http
-  seq: 12
+  seq: 10
 }
 
 get {
-  url: {{url}}/api/documents?status=PUBLISHED&page=0&size=10&sort=createdAt,desc
+  url: {{url}}/api/documents?status=PUBLISHED
   body: json
   auth: inherit
 }
 
 params:query {
   status: PUBLISHED
-  page: 0
-  size: 10
-  sort: createdAt,desc
 }
 
 settings {

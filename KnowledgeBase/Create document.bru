@@ -1,7 +1,7 @@
 meta {
-  name: Create document
+  name: Create Document
   type: http
-  seq: 10
+  seq: 13
 }
 
 post {
@@ -15,14 +15,7 @@ auth:bearer {
 }
 
 body:multipart-form {
-  dto: '''
-    {
-      "title": "Мой документ",
-      "description": "Описание документа",
-      "categoryId": 1
-    }
-  ''' @contentType(application/json)
-  file: @file(C:\Users\Admin\Downloads\orders.csv)
+  file: @file(C:\Users\Admin\Downloads\Метод_указания Инженерия знаний.pdf)
 }
 
 settings {

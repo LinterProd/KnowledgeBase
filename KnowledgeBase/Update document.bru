@@ -1,12 +1,12 @@
 meta {
   name: Update document
   type: http
-  seq: 11
+  seq: 9
 }
 
 put {
   url: {{url}}/api/documents/1
-  body: json
+  body: multipartForm
   auth: bearer
 }
 
@@ -14,12 +14,8 @@ auth:bearer {
   token: {{accessToken}}
 }
 
-body:json {
-  {
-    "title": "Spring Boot Best Practices - Updated",
-    "description": "Updated comprehensive guide to Spring Boot development",
-    "categoryId": 1
-  }
+body:multipart-form {
+  title: legend.pdf
 }
 
 settings {
