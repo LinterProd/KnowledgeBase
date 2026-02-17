@@ -15,9 +15,6 @@ public class Document extends BaseEntity {
     @Column(nullable = false)
     private String title;
 
-    @Column(length = 2000)
-    private String description;
-
     @Column(name = "file_path", nullable = false, length = 1000)
     private String filePath;
 
@@ -26,10 +23,6 @@ public class Document extends BaseEntity {
 
     @Column(name = "file_size")
     private Long fileSize;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
-    private Category category;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id", nullable = false)
