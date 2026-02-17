@@ -1,9 +1,7 @@
 package com.metarash.backend.validation;
 
-import com.metarash.backend.model.dto.request.DocumentCreateDto;
 import com.metarash.backend.model.entity.Document;
 import com.metarash.backend.model.entity.User;
-import io.micrometer.common.util.StringUtils;
 import jakarta.validation.ValidationException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Component;
@@ -19,10 +17,7 @@ public class DocumentValidator {
             "application/pdf", "image/jpeg", "image/png", "text/plain", "text/csv"
     );
 
-    public void validateCreate(DocumentCreateDto dto, MultipartFile file, User currentUser) {
-        if (dto == null) {
-            throw new ValidationException("DTO is required");
-        }
+    public void validateCreate(MultipartFile file, User currentUser) {
         if (file == null || file.isEmpty()) {
             throw new ValidationException("File is required");
         }
@@ -35,9 +30,6 @@ public class DocumentValidator {
         }
         if (currentUser == null) {
             throw new AccessDeniedException("User must be authenticated");
-        }
-        if (StringUtils.isBlank(dto.title())) {
-            throw new ValidationException("Title is required");
         }
     }
 

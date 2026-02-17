@@ -2,25 +2,20 @@ package com.metarash.backend.service;
 
 import com.metarash.backend.exception.EntityNotFoundException;
 import com.metarash.backend.mapper.DocumentMapper;
-import com.metarash.backend.model.dto.request.DocumentCreateDto;
 import com.metarash.backend.model.dto.request.DocumentUpdateDto;
-import com.metarash.backend.model.entity.Category;
 import com.metarash.backend.model.entity.Document;
 import com.metarash.backend.model.entity.DocumentStatus;
 import com.metarash.backend.model.entity.User;
-import com.metarash.backend.repository.CategoryRepository;
 import com.metarash.backend.repository.DocumentRepository;
 import com.metarash.backend.validation.DocumentValidator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
-import java.util.Optional;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -29,17 +24,13 @@ import java.util.Optional;
 public class DocumentService {
 
     private final DocumentRepository documentRepository;
-    private final CategoryRepository categoryRepository;
     private final MinioService minioService;
     private final DocumentMapper documentMapper;
     private final DocumentValidator documentValidator;
 
     @Transactional
-    public Document createDocument(DocumentCreateDto dto, MultipartFile file, User currentUser) {
-        documentValidator.validateCreate(dto, file, currentUser);
-        Category category = Optional.ofNullable(dto.categoryId())
-                .map(this::getCategory)
-                .orElse(null);
+    public Document createDocument(MultipartFile file, User currentUser) {
+        documentValidator.validateCreate(file, currentUser);
 
         String fileName;
         try {
@@ -48,17 +39,17 @@ public class DocumentService {
             throw new RuntimeException("Failed to upload file to MinIO", e);
         }
 
-        Document document = documentMapper.toEntity(dto);
-        document.setCategory(category);
-        document.setAuthor(currentUser);
-        document.setFilePath(fileName);
-        document.setFileType(file.getContentType());
-        document.setFileSize(file.getSize());
+        Document document = Document.builder()
+                .author(currentUser)
+                .filePath(fileName)
+                .fileType(file.getContentType())
+                .fileSize(file.getSize())
+                .title(file.getOriginalFilename()).build();
         return documentRepository.save(document);
     }
 
-    public Page<Document> getDocumentsByStatus(DocumentStatus status, Pageable pageable) {
-        return documentRepository.findByStatus(status, pageable);
+    public List<Document> getDocumentsByStatus(DocumentStatus status) {
+        return documentRepository.findByStatus(status);
     }
 
     public Document getDocumentById(Long id) {
@@ -71,10 +62,6 @@ public class DocumentService {
         Document document = getDocumentById(id);
         documentValidator.validateUpdate(document, file, currentUser);
         documentMapper.updateFromDto(dto, document);
-
-        if (dto.categoryId() != null) {
-            document.setCategory(getCategory(dto.categoryId()));
-        }
 
         if (file != null && !file.isEmpty()) {
             try {
@@ -123,10 +110,5 @@ public class DocumentService {
         } catch (Exception e) {
             throw new RuntimeException("Failed to get file URL from MinIO", e);
         }
-    }
-
-    private Category getCategory(Long id) {
-        return categoryRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Category not found with id: " + id));
     }
 }

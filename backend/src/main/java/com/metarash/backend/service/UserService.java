@@ -13,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -30,6 +32,10 @@ public class UserService {
         User user = userMapper.toEntity(dto);
         user.setPasswordHash(passwordEncoder.encode(dto.password()));
         return userRepository.save(user);
+    }
+
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 
     public User getUserById(Long id) {
@@ -55,13 +61,13 @@ public class UserService {
 
     @Transactional
     public void suspendUser(Long id) {
-        getUserById(id);  // Ensure exists
+        getUserById(id);
         userRepository.suspendUser(id);
     }
 
     @Transactional
     public void activateUser(Long id) {
-        getUserById(id);  // Ensure exists
+        getUserById(id);
         userRepository.activateUser(id);
     }
 }

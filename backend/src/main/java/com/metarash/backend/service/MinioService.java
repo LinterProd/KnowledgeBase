@@ -20,7 +20,7 @@ public class MinioService {
     private final MinioProperties minioProperties;
 
     public String createFile(MultipartFile file) throws Exception {
-        String fileName = UUID.randomUUID() + "-" + file.getOriginalFilename(); // Уникальное имя
+        String fileName = UUID.randomUUID() + "-" + file.getOriginalFilename();
         log.info("Creating Minio File for respons as filename: {}", fileName);
         putObject(file, fileName);
         return fileName;
