@@ -2,5 +2,6 @@ package com.metarash.backend.model.dto.response;
 
 public record AuthResponse(
         String accessToken,
-        String refreshToken
+        String refreshToken,
+        UserResponseDto user
 ) {}

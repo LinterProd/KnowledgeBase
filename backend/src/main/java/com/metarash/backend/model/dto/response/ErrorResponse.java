@@ -4,16 +4,16 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 public record ErrorResponse(
-        LocalDateTime timestamp,
+        Instant timestamp,
         int status,
         String error,
         String message,
         String path
 ) {
     public ErrorResponse(HttpServletResponse response, String message, HttpServletRequest request) {
-        this(LocalDateTime.now(), response.getStatus(), HttpStatus.valueOf(response.getStatus()).getReasonPhrase(), message, request.getRequestURI());
+        this(Instant.now(), response.getStatus(), HttpStatus.valueOf(response.getStatus()).getReasonPhrase(), message, request.getRequestURI());
     }
 }

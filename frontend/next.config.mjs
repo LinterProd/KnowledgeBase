@@ -1,6 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    // Твои настройки здесь, если были
+    async rewrites() {
+        return [
+            {
+                source: '/api/:path*',
+                destination: 'http://localhost:8080/api/:path*',
+            },
+        ];
+    },
     reactStrictMode: true,
     // Если используешь Tailwind или что-то ещё — добавь
 };
