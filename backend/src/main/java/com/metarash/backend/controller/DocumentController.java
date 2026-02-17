@@ -1,6 +1,5 @@
 package com.metarash.backend.controller;
 
-import com.metarash.backend.model.dto.request.DocumentCreateDto;
 import com.metarash.backend.model.dto.request.DocumentUpdateDto;
 import com.metarash.backend.model.dto.response.DocumentResponseDto;
 import com.metarash.backend.model.entity.Document;
@@ -11,10 +10,6 @@ import com.metarash.backend.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.*;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -37,19 +33,17 @@ public class DocumentController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<DocumentResponseDto> createDocument(
-            @RequestPart("dto") @Valid DocumentCreateDto dto,
             @RequestPart("file") MultipartFile file) {
         User currentUser = getCurrentUser();
-        Document document = documentService.createDocument(dto, file, currentUser);
+        Document document = documentService.createDocument(file, currentUser);
         return ResponseEntity.status(HttpStatus.CREATED).body(mapToDto(document));
     }
 
     @GetMapping
-    public ResponseEntity<Page<DocumentResponseDto>> getDocumentsByStatus(
-            @RequestParam(defaultValue = "PUBLISHED") DocumentStatus status,
-            @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
-        Page<Document> documents = documentService.getDocumentsByStatus(status, pageable);
-        return ResponseEntity.ok(documents.map(this::mapToDto));
+    public ResponseEntity<List<DocumentResponseDto>> getDocumentsByStatus(
+            @RequestParam(defaultValue = "PUBLISHED") DocumentStatus status) {
+        List<Document> documents = documentService.getDocumentsByStatus(status);
+        return ResponseEntity.ok(documents.stream().map(this::mapToDto).toList());
     }
 
     @GetMapping("/{id}")
@@ -100,7 +94,6 @@ public class DocumentController {
         }
     }
 
-    // Получение текущего пользователя
     private User getCurrentUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         log.info("Current User: {}", auth.getName());
@@ -112,9 +105,8 @@ public class DocumentController {
     }
 
     private DocumentResponseDto mapToDto(Document document) {
-        return new DocumentResponseDto(document.getId(), document.getTitle(), document.getDescription(),
+        return new DocumentResponseDto(document.getId(), document.getTitle(),
                 document.getFilePath(), document.getFileType(), document.getFileSize(),
-                document.getCategory() != null ? document.getCategory().getId() : null,
                 document.getAuthor().getId(), document.getStatus());
     }
 }

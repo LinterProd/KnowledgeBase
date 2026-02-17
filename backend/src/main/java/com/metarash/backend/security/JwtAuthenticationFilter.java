@@ -36,7 +36,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String jwt = authHeader.substring(7);
         try {
             if (jwtService.validateToken(jwt, false)) {
-                Long userId = jwtService.getUserId(jwt, false);
                 String username = jwtService.getUsername(jwt);
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username); // TODO понять как оптимизировать постоянный запрос на юзера
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
@@ -46,7 +45,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
         } catch (JwtException e) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            return;  // Не пропускаем дальше
+            return;
         }
 
         filterChain.doFilter(request, response);
