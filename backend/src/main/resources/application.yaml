@@ -1,16 +1,19 @@
 spring:
   application:
-    name: EventTest
+    name: KnowledgeBase
+
   datasource:
     url: jdbc:postgresql://localhost:5432/rosgranstroy
     username: postgres
     password: 12345
     driver-class-name: org.postgresql.Driver
+
   servlet:
     multipart:
       enabled: true
       max-file-size: 10MB
       max-request-size: 10MB
+
   jpa:
     hibernate:
       ddl-auto: validate
@@ -20,8 +23,6 @@ spring:
         format_sql: true
         default_schema: knowledge_base
 
-    show-sql: true
-
   flyway:
     enabled: true
     locations: classpath:db/migration
@@ -30,8 +31,11 @@ spring:
     schemas: knowledge_base
     default-schema: knowledge_base
 
+  jackson:
+    time-zone: Europe/Moscow
+
 minio:
-  url: http://localhost:9000  # URL MinIO ???????
+  url: http://localhost:9000
   access-key: minioadmin
   secret-key: minioadmin
   bucket-name: user-files
@@ -39,5 +43,5 @@ minio:
 jwt:
   access-secret: bJKms382OcugiHhyeFQq09maTBikKplUReIdoNbKTlE
   refresh-secret: pbgDBKakqoxdn_MDT-13ZGH9GRpiDjAN7FOM829ArW4
-  access-expiration: 900000  # 15 ??? ? ms
-  refresh-expiration: 604800000  # 7 ???? ? ms
+  access-expiration: 900000
+  refresh-expiration: 604800000
